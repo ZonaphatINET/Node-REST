@@ -29,19 +29,19 @@ let books = [
 ];
 
 // route to get all books
-app.get("/api/books", (req, res) => {
+app.get("/books", (req, res) => {
     res.json(books);
 });
 
 // route to get a book by id
-app.get("/api/books/:id", (req, res) => {
+app.get("/books/:id", (req, res) => {
     const book = books.find(b => b.id === parseInt(req.params.id));
     if (!book) res.status(404).send('Book not found');
     res.json(book);
 });
 
 // route to create a book
-app.post("/api/books", (req, res) => {
+app.post("/books", (req, res) => {
     const book = {
         id: books.length + 1,
         title: req.body.title,
@@ -52,7 +52,16 @@ app.post("/api/books", (req, res) => {
 });
 
 // route to update a book
-app.put("/api/books/:id", (req, res) => {
+app.put("/books/:id", (req, res) => {
+    const book = books.find(b => b.id === parseInt(req.params.id));
+    if (!book) res.status(404).send('Book not found');
+    book.title = req.body.title;
+    book.author = req.body.author;
+    res.send(book);
+});
+
+// route to delete a book
+app.delete("/books/:id", (req, res) => {
     const book = books.find(b => b.id === parseInt(req.params.id));
     if (!book) res.status(404).send('Book not found');
     const index = books.indexOf(book);
