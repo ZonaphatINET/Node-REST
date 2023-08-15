@@ -6,3 +6,4 @@
  npm install express
  npm start
  npm install dotenv
+ npm i -D nodemon
