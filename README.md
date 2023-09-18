@@ -7,4 +7,5 @@
  npm start
  npm install dotenv
  npm i -D nodemon
- 
+ npm i sqlite3
+ npm install sequelize
