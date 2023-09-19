@@ -12,80 +12,105 @@
 //  console.log(`Example app listening at http://localhost:${port}`);
 //});
 
-const express = require('express')
-const sqlite3 = require('sqlite3')
+const express = require("express");
+const Sequelize = require("sequelize");
 const app = express();
 
-
-const db = new sqlite3.Database('./Database/Book.sqlite');
-
+// parse incoming requests
 app.use(express.json());
 
-db.run(`CREATE TABLE IF NOT EXISTS books (
-    id INTEGER PRIMARY KEY ,
-    title TEXT,
-    author TEXT
-)`);
+// connect to connection to the database
+const sequelize = new Sequelize('database', 'username', 'password',{
+    host: 'localhost',
+    dialect: 'sqlite',
+    storage: './Database/Book.sqlite'
+});
 
-app.get('/books', (req, res) => {
-    db.all('SELECT * FROM books', (err, rows) => {
-        if (err) {
-            res.status(500).send(err);
-        }else {
-            res.json(rows);
-        }
-    });
-}); 
+// define the book model
+const Book = sequelize.define('book', {
+    id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+    },
+    title: {
+        type: Sequelize.STRING,
+        allowNull:false
+    },
+    author: {
+        type: Sequelize.STRING,
+        allowNull:false
+    }
+});
 
+// create the books table if it doesn't exist
+sequelize.sync();
 
-app.get('/books/:id', (req, res) => {   
-    db.get('SELECT * FROM books WHERE id = ?', req.params.id, (err, row) => {
-        if (err) {
-            res.status(500).send(err);
-        } else {
-            if (!row) {
-                res.status(404).send('Book Not found');
-            } else {
-                res.json(row);
-            }
-        }
+// route to get all books
+app.get("/books", (req, res) => {
+    Book.findAll().then(books => {
+        res.json(books);
+    }).catch(err => {
+        res.status(500).send(err);
     });
 });
 
-app.post('/books', (req, res) => {
-    const book = req.body;
-    db.run('INSERT INTO books (title, author) VALUES (?, ?)', book.title, book.author, function (err) {
-        if (err) {
-            res.status(500).send(err);
+// route to get a book by id
+app.get("/books/:id", (req, res) => {
+    Book.findByPk(req.params.id).then(book => {
+        if (!book) {
+            res.status(404).send('Book not found');
         } else {
-            book.id = this.lastID;
-            res.send(book);
+            res.json(book);
         }
+    }).catch(err => {
+        res.status(500).send(err);
     });
 });
 
-
-app.put('/books/:id', (req, res) => {
-    const book = req.body;
-    db.run('UPDATE books SET title = ?, author = ? WHERE id = ?', book.title, book.author, req.params.id, function (err) {
-        if (err) {
-            res.status(500).send(err);
-        } else {
-            res.send(book);
-        }
+// route to create a book
+app.post("/books", (req, res) => {
+    Book.create(req.body).then(book => {
+        res.json(book);
+    }).catch(err => {
+        res.status(500).send(err);
     });
 });
 
-
-app.delete('/books/:id', (req, res) => {
-    db.run('DELETE FROM books WHERE id = ?', req.params.id, function (err) {
-        if (err) {
-            res.status(500).send(err);
+// route to update a book
+app.put("/books/:id", (req, res) => {
+    Book.findByPk(req.params.id).then(book => {
+        if (!book) {
+            res.status(404).send('Book not found');
         } else {
-            res.send({});
+            book.update(req.body).then(() => {
+                res.json(book);
+            }).catch(err => {
+                res.status(500).send(err);
+            });
         }
+    }).catch(err => {
+        res.status(500).send(err);
     });
 });
 
-const port = process.env.PORT || 5000;
-app.listen(port, () => console.log(`Server is running on port ${port}`));
+// route to delete a book
+app.delete("/books/:id", (req, res) => {
+    Book.findByPk(req.params.id).then(book => {
+        if (!book) {
+            res.status(404).send('Book not found');
+        } else {
+            book.destroy().then(() => {
+                res.send({});
+            }).catch(err => {
+                res.status(500).send(err);
+            });
+        }
+    }).catch(err => {
+        res.status(500).send(err);
+    });
+});
+
+// start the server
+const port = process.env.PORT || 80;
+app.listen(port, () => { console.log(`Listening on port ${port}...`); });
