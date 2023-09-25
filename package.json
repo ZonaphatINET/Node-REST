@@ -1,32 +1,7 @@
 {
-  "name": "node-rest",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "start": "node src/index.js",
-    "format": "prettier --write *.js",
-    "dev": "nodemon scr/index.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ZonaphatINET/Node-REST.git"
-  },
-  "keywords": [],
-  "author": "Mr.Naphat",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/ZonaphatINET/Node-REST/issues"
-  },
-  "homepage": "https://github.com/ZonaphatINET/Node-REST#readme",
-  "devDependencies": {
-    "nodemon": "^3.0.1",
-    "prettier": "^3.0.3"
-  },
   "dependencies": {
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "http": "^0.0.1-security",
     "sequelize": "^6.33.0",
     "sqlite3": "^5.1.6"
   }

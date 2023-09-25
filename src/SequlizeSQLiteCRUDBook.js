@@ -57,7 +57,7 @@ app.get("/books/:id", (req, res) => {
 // route to create a book
 app.post("/books", (req, res) => {
     Book.create(req.body).then(book => {
-        res.json(book);
+        res.send(book);
     }).catch(err => {
         res.status(500).send(err);
     });
@@ -70,7 +70,7 @@ app.put("/books/:id", (req, res) => {
             res.status(404).send('Book not found');
         } else {
             book.update(req.body).then(() => {
-                res.json(book);
+                res.send(book);
             }).catch(err => {
                 res.status(500).send(err);
             });
@@ -90,11 +90,11 @@ app.delete("/books/:id", (req, res) => {
                 res.send({});
             }).catch(err => {
                 res.status(500).send(err);
-            });
+                });
         }
-    }).catch(err => {
-        res.status(500).send(err);
-    });
+}).catch(err => {
+    res.status(500).send(err);
+});
 });
 
 // start the server
