@@ -8,4 +8,4 @@
  npm install dotenv
  npm i -D nodemon
  npm i sqlite3
- npm install sequelize
+ npm install sequelize dotenv sqlite3 express prettier
