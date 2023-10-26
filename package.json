@@ -7,5 +7,18 @@
     "pg": "^8.11.3",
     "sequelize": "^6.33.0",
     "sqlite3": "^5.1.6"
-  }
+  },
+  "devDependencies": {
+    "prettier": "^3.0.3"
+  },
+  "name": "rest",
+  "description": "npm init -y\r  npm install --save-dev prettier\r  npm run format\r  npm install express\r  npm start\r  npm install dotenv\r  npm i -D nodemon\r  npm i sqlite3\r  npm install sequelize dotenv sqlite3 express prettier",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "formet": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
